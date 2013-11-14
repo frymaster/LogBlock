@@ -33,20 +33,24 @@ public class ChestAccessLogging extends LoggingListener
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onInventoryClose(InventoryCloseEvent event) {
 
-		if (!isLogging(event.getPlayer().getWorld(), Logging.CHESTACCESS)) return;
-		InventoryHolder holder = event.getInventory().getHolder();
-		if (holder instanceof BlockState || holder instanceof DoubleChest) {
-			final HumanEntity player = event.getPlayer();
-			final ItemStack[] before = containers.get(player);
-			if (before != null) {
-				final ItemStack[] after = compressInventory(event.getInventory().getContents());
-				final ItemStack[] diff = compareInventories(before, after);
-				final Location loc = getInventoryHolderLocation(holder);
-				for (final ItemStack item : diff) {
-					consumer.queueChestAccess(player.getName(), loc, loc.getWorld().getBlockTypeIdAt(loc), (short)item.getTypeId(), (short)item.getAmount(), rawData(item));
+		try {
+			if (!isLogging(event.getPlayer().getWorld(), Logging.CHESTACCESS)) return;
+			InventoryHolder holder = event.getInventory().getHolder();
+			if (holder instanceof BlockState || holder instanceof DoubleChest) {
+				final HumanEntity player = event.getPlayer();
+				final ItemStack[] before = containers.get(player);
+				if (before != null) {
+					final ItemStack[] after = compressInventory(event.getInventory().getContents());
+					final ItemStack[] diff = compareInventories(before, after);
+					final Location loc = getInventoryHolderLocation(holder);
+					for (final ItemStack item : diff) {
+						consumer.queueChestAccess(player.getName(), loc, loc.getWorld().getBlockTypeIdAt(loc), (short)item.getTypeId(), (short)item.getAmount(), rawData(item));
+					}
+					containers.remove(player);
 				}
-				containers.remove(player);
 			}
+		} catch (Error e) {
+			return;
 		}
 	}
 
@@ -63,7 +67,7 @@ public class ChestAccessLogging extends LoggingListener
 					}
 				}
 			}
-		} catch (Exception e) {
+		} catch (Error e) {
 			return;
 		}
 	}
