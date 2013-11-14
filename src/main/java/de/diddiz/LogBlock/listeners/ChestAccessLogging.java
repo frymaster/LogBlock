@@ -53,14 +53,18 @@ public class ChestAccessLogging extends LoggingListener
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onInventoryOpen(InventoryOpenEvent event) {
 
-		if (!isLogging(event.getPlayer().getWorld(), Logging.CHESTACCESS)) return;
-		if (event.getInventory() != null) {
-			InventoryHolder holder = event.getInventory().getHolder();
-			if (holder instanceof BlockState || holder instanceof DoubleChest) {
-				if (getInventoryHolderType(holder) != 58) {
-					containers.put(event.getPlayer(), compressInventory(event.getInventory().getContents()));
+		try {
+			if (!isLogging(event.getPlayer().getWorld(), Logging.CHESTACCESS)) return;
+			if (event.getInventory() != null) {
+				InventoryHolder holder = event.getInventory().getHolder();
+				if (holder instanceof BlockState || holder instanceof DoubleChest) {
+					if (getInventoryHolderType(holder) != 58) {
+						containers.put(event.getPlayer(), compressInventory(event.getInventory().getContents()));
+					}
 				}
 			}
+		} catch (Exception e) {
+			return;
 		}
 	}
 }
