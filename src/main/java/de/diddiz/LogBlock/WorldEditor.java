@@ -248,5 +248,10 @@ public class WorldEditor implements Runnable
 		public Location getLocation() {
 			return loc;
 		}
+
+		@Override
+		public String getActionText() {
+			return getMessage();
+		}
 	}
 }

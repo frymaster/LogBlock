@@ -29,4 +29,9 @@ public class SummedBlockChanges implements LookupCacheElement
 	public String getMessage() {
 		return created + spaces((int)((10 - String.valueOf(created).length()) / spaceFactor)) + destroyed + spaces((int)((10 - String.valueOf(destroyed).length()) / spaceFactor)) + group;
 	}
+
+	@Override
+	public String getActionText() {
+	    return getMessage();
+	}
 }

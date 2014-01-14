@@ -46,9 +46,13 @@ public class BlockChange implements LookupCacheElement
 
 	@Override
 	public String toString() {
+		if (date > 0) return Config.formatter.format(date) + " " + getActionText();
+		return getActionText();
+	}
+
+	@Override
+	public String getActionText() {
 		final StringBuilder msg = new StringBuilder();
-		if (date > 0)
-			msg.append(Config.formatter.format(date)).append(" ");
 		if (playerName != null)
 			msg.append(playerName).append(" ");
 		if (signtext != null) {

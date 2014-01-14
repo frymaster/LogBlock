@@ -324,8 +324,22 @@ public class CommandsHandler implements CommandExecutor
 				final int numberOfPages = (int)Math.ceil(session.lookupCache.length / (double)linesPerPage);
 				if (numberOfPages != 1)
 					sender.sendMessage(ChatColor.DARK_AQUA + "Page " + page + "/" + numberOfPages);
-				for (int i = startpos; i <= stoppos; i++)
-					sender.sendMessage(ChatColor.GOLD + (session.lookupCache[i].getLocation() != null ? "(" + (i + 1) + ") " : "") + session.lookupCache[i].getMessage());
+				
+				for (int i = startpos; i <= stoppos; i++) {
+					String actionText = (session.lookupCache[i].getLocation() != null ? "(" + (i + 1) + ") " : "") + session.lookupCache[i].getActionText();
+					int count = 0;
+					for (int j = i+1; j <= stoppos; j++) {
+						if (actionText.equals((session.lookupCache[j].getLocation() != null ? "(" + (i + 1) + ") " : "") + session.lookupCache[j].getActionText()))
+							count++;
+						else
+							break;
+					}
+					if (count == 0)
+						sender.sendMessage(ChatColor.GOLD + (session.lookupCache[i].getLocation() != null ? "(" + (i + 1) + ") " : "") + session.lookupCache[i].getMessage());
+					else
+						sender.sendMessage(ChatColor.GOLD + (session.lookupCache[i].getLocation() != null ? "(" + (i + 1) + ") " : "") + session.lookupCache[i].getMessage() + " x " + Integer.toString(count + 1));
+					i = i + count;
+				}
 				session.page = page;
 			} else
 				sender.sendMessage(ChatColor.RED + "There isn't a page '" + page + "'");

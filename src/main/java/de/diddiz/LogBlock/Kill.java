@@ -34,9 +34,13 @@ public class Kill implements LookupCacheElement
 
 	@Override
 	public String toString() {
+		if (date > 0) return Config.formatter.format(date) + " " + getActionText();
+		return getActionText();
+	}
+
+	@Override
+	public String getActionText() {
 		final StringBuilder msg = new StringBuilder();
-		if (date > 0)
-			msg.append(Config.formatter.format(date)).append(" ");
 		msg.append(killerName).append(" killed ").append(victimName);
 		if (loc != null)
 			msg.append(" at ").append(loc.getBlockX()).append(":").append(loc.getBlockY()).append(":").append(loc.getBlockZ());

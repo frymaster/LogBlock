@@ -29,4 +29,9 @@ public class SummedKills implements LookupCacheElement
 	public String getMessage() {
 		return kills + spaces((int)((6 - String.valueOf(kills).length()) / spaceFactor)) + killed + spaces((int)((7 - String.valueOf(killed).length()) / spaceFactor)) + playerName;
 	}
+	
+	@Override
+	public String getActionText() {
+		return getMessage();
+	}
 }

@@ -32,4 +32,9 @@ public class ChatMessage implements LookupCacheElement
 	public String getMessage() {
 		return (playerName != null ? "<" + playerName + "> " : "") + (message != null ? message : "");
 	}
+	
+	@Override
+	public String getActionText() {
+	    return getMessage();
+	}
 }
