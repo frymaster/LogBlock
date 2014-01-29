@@ -378,6 +378,14 @@ public class Consumer extends TimerTask
 		return true;
 	}
 
+	static boolean setHideStatus(Player player,boolean hidden) {
+		final String playerName = player.getName().toLowerCase();
+		if (hidden)
+			return hiddenPlayers.add(playerName);
+		else
+			return hiddenPlayers.remove(playerName);
+	}
+
 	private boolean addPlayer(Statement state, String playerName) throws SQLException {
 		// Odd query contruction is to work around innodb auto increment behaviour - bug #492
 		state.execute("INSERT IGNORE INTO `lb-players` (playername) SELECT '" + playerName + "' FROM `lb-players` WHERE NOT EXISTS (SELECT NULL FROM `lb-players` WHERE playername = '" + playerName + "') LIMIT 1;");
