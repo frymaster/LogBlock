@@ -21,6 +21,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import de.diddiz.LogBlock.LogBlock;
+import static org.bukkit.Bukkit.getLogger;
 
 public class ChestAccessLogging extends LoggingListener
 {
@@ -31,7 +32,7 @@ public class ChestAccessLogging extends LoggingListener
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onInventoryClose(InventoryCloseEvent event) {
+	public void onInventoryClose(InventoryCloseEvent event) throws Exception {
 
 		if (!isLogging(event.getPlayer().getWorld(), Logging.CHESTACCESS)) return;
 		InventoryHolder holder = event.getInventory().getHolder();
@@ -41,24 +42,34 @@ public class ChestAccessLogging extends LoggingListener
 			if (before != null) {
 				final ItemStack[] after = compressInventory(event.getInventory().getContents());
 				final ItemStack[] diff = compareInventories(before, after);
-				final Location loc = getInventoryHolderLocation(holder);
-				for (final ItemStack item : diff) {
-					consumer.queueChestAccess(player.getName(), loc, loc.getWorld().getBlockTypeIdAt(loc), (short)item.getTypeId(), (short)item.getAmount(), rawData(item));
+				try {
+					final Location loc = getInventoryHolderLocation(holder);
+					for (final ItemStack item : diff) {
+						consumer.queueChestAccess(player.getName(), loc, loc.getWorld().getBlockTypeIdAt(loc), (short)item.getTypeId(), (short)item.getAmount(), rawData(item));
+					}
+					containers.remove(player);
+				} catch (Exception e) {
+					getLogger().warning(event.getPlayer().getLocation().toString());
+					throw e;
 				}
-				containers.remove(player);
 			}
 		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onInventoryOpen(InventoryOpenEvent event) {
+	public void onInventoryOpen(InventoryOpenEvent event) throws Exception {
 
 		if (!isLogging(event.getPlayer().getWorld(), Logging.CHESTACCESS)) return;
 		if (event.getInventory() != null) {
 			InventoryHolder holder = event.getInventory().getHolder();
 			if (holder instanceof BlockState || holder instanceof DoubleChest) {
-				if (getInventoryHolderType(holder) != 58) {
-					containers.put(event.getPlayer(), compressInventory(event.getInventory().getContents()));
+				try {
+					if (getInventoryHolderType(holder) != 58) {
+						containers.put(event.getPlayer(), compressInventory(event.getInventory().getContents()));
+					}
+				} catch (Exception e) {
+					getLogger().warning(event.getPlayer().getLocation().toString());
+					throw e;
 				}
 			}
 		}
