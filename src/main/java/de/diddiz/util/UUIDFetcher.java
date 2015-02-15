@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static org.bukkit.Bukkit.getLogger;
-
 // Adapted from https://gist.github.com/evilmidget38/26d70114b834f71fb3b4
 
 public class UUIDFetcher {
@@ -40,7 +38,6 @@ public class UUIDFetcher {
 	}
 
 	private static void writeBody(HttpURLConnection connection, String body) throws Exception {
-	    getLogger().info(body);
 		OutputStream stream = connection.getOutputStream();
 		stream.write(body.getBytes());
 		stream.flush();
