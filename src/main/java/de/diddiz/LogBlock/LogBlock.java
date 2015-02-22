@@ -131,11 +131,11 @@ public class LogBlock extends JavaPlugin
 			else {
 				getLogger().warning("Failed to schedule consumer with bukkit scheduler. Now trying schedule with timer.");
 				timer = new Timer();
-				timer.scheduleAtFixedRate(consumer, delayBetweenRuns * 1000, delayBetweenRuns * 1000);
+				timer.schedule(consumer, delayBetweenRuns * 1000, delayBetweenRuns * 1000);
 			}
 		} else {
 			timer = new Timer();
-			timer.scheduleAtFixedRate(consumer, delayBetweenRuns * 1000, delayBetweenRuns * 1000);
+			timer.schedule(consumer, delayBetweenRuns * 1000, delayBetweenRuns * 1000);
 			getLogger().info("Scheduled consumer with timer.");
 		}
 		getServer().getScheduler().runTaskAsynchronously(this, new Updater.PlayerCountChecker(this));
