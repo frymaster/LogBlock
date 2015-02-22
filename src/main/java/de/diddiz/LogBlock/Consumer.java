@@ -303,6 +303,9 @@ public class Consumer extends TimerTask
 				if (r instanceof PreparedStatementRow) {
 					PreparedStatementRow PSRow = (PreparedStatementRow) r;
 					if (r instanceof MergeableRow) {
+						int batchCount=count;
+						// if we've reached our row target but not exceeded our time target, allow merging of up to 50% of our row limit more rows
+						if (count > forceToProcessAtLeast) batchCount = forceToProcessAtLeast / 2;
 						while(!queue.isEmpty()) {
 							MergeableRow mRow = (MergeableRow) PSRow;
 							Row s = queue.peek();
@@ -312,7 +315,8 @@ public class Consumer extends TimerTask
 							if (mRow.canMerge(mRow2)) {
 								PSRow = mRow.merge((MergeableRow) queue.poll());
 								count++;
-								if (count > forceToProcessAtLeast) break;
+								batchCount++;
+								if (batchCount > forceToProcessAtLeast) break;
 							} else break;
 						}
 					}
