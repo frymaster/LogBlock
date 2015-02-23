@@ -268,7 +268,7 @@ public class Consumer extends TimerTask
 	}
 
 	@Override
-	public void run() {
+	public synchronized void run() {
 		if (queue.isEmpty() || !lock.tryLock())
 			return;
 		final Connection conn = logblock.getConnection();
