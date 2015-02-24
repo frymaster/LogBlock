@@ -34,6 +34,6 @@ public class ChatMessage implements LookupCacheElement
 
 	@Override
 	public String getMessage() {
-		return (player != null ? "<" + player.getName() + "> " : "") + (message != null ? message : "");
+		return Config.formatter.format(date) + (player != null ? "<" + player.getName() + "> " : "") + (message != null ? message : "");
 	}
 }
