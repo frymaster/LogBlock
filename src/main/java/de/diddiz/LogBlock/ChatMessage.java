@@ -1,5 +1,6 @@
 package de.diddiz.LogBlock;
 
+import de.diddiz.LogBlock.config.Config;
 import static de.diddiz.util.LoggingUtil.checkText;
 import java.sql.ResultSet;
 import java.sql.SQLException;
