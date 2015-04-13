@@ -8,8 +8,9 @@ import java.sql.SQLException;
 
 import static de.diddiz.util.MaterialName.materialName;
 import static de.diddiz.util.Utils.spaces;
+import mkremins.fanciful.FancyMessage;
 
-public class SummedBlockChanges implements LookupCacheElement {
+public class SummedBlockChanges extends AbstractLookupCacheElement implements LookupCacheElement {
     private final String group;
     private final int created, destroyed;
     private final float spaceFactor;
@@ -32,5 +33,15 @@ public class SummedBlockChanges implements LookupCacheElement {
     @Override
     public String getMessage() {
         return created + spaces((int) ((10 - String.valueOf(created).length()) / spaceFactor)) + destroyed + spaces((int) ((10 - String.valueOf(destroyed).length()) / spaceFactor)) + group;
+    }
+
+    @Override
+    public String getDataMessage() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public FancyMessage getJsonMessage() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

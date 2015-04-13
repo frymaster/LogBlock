@@ -15,20 +15,24 @@ public class LookupCacheElementFactory {
         this.spaceFactor = spaceFactor;
     }
 
-    public LookupCacheElement getLookupCacheElement(ResultSet rs) throws SQLException {
+    public LookupCacheElement getLookupCacheElement(int index, ResultSet rs) throws SQLException {
         if (params.bct == BlockChangeType.CHAT) {
             return new ChatMessage(rs, params);
         }
         if (params.bct == BlockChangeType.KILLS) {
             if (params.sum == SummarizationMode.NONE) {
-                return new Kill(rs, params);
+                return new Kill(index,rs, params);
             } else if (params.sum == SummarizationMode.PLAYERS) {
                 return new SummedKills(rs, params, spaceFactor);
             }
         }
         if (params.sum == SummarizationMode.NONE) {
-            return new BlockChange(rs, params);
+            return new BlockChange(index,rs, params);
         }
         return new SummedBlockChanges(rs, params, spaceFactor);
+    }
+
+    public LookupCacheElement getLookupCacheElement(ResultSet rs) throws SQLException {
+        return getLookupCacheElement(0,rs);
     }
 }

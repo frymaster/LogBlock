@@ -6,12 +6,14 @@ import org.bukkit.inventory.ItemStack;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import mkremins.fanciful.FancyMessage;
 
-public class Kill implements LookupCacheElement {
+public class Kill extends AbstractLookupCacheElement implements LookupCacheElement {
     final long id, date;
     public final Location loc;
     final String killerName, victimName;
     final int weapon;
+    int index=0;
 
     public Kill(String killerName, String victimName, int weapon, Location loc) {
         id = 0;
@@ -21,6 +23,11 @@ public class Kill implements LookupCacheElement {
         this.victimName = victimName;
         this.weapon = weapon;
     }
+    
+    public Kill(int index, String killerName, String victimName, int weapon, Location loc) {
+        this(killerName, victimName, weapon, loc);
+        this.index = index;
+    }
 
     public Kill(ResultSet rs, QueryParams p) throws SQLException {
         id = p.needId ? rs.getInt("id") : 0;
@@ -29,6 +36,11 @@ public class Kill implements LookupCacheElement {
         killerName = p.needKiller ? rs.getString("killer") : null;
         victimName = p.needVictim ? rs.getString("victim") : null;
         weapon = p.needWeapon ? rs.getInt("weapon") : 0;
+    }
+
+    public Kill(int index, ResultSet rs, QueryParams p) throws SQLException {
+        this(rs,p);
+        this.index = index;
     }
 
     @Override
@@ -62,5 +74,17 @@ public class Kill implements LookupCacheElement {
             item = "fist";
         }
         return item;
+    }
+
+    @Override
+    public String getDataMessage() {
+        //int index, String killerName, String victimName, int weapon, Location loc
+        
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public FancyMessage getJsonMessage() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

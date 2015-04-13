@@ -28,6 +28,7 @@ import static de.diddiz.LogBlock.config.Config.dontRollback;
 import static de.diddiz.LogBlock.config.Config.replaceAnyway;
 import static de.diddiz.util.BukkitUtils.*;
 import static de.diddiz.util.MaterialName.materialName;
+import mkremins.fanciful.FancyMessage;
 import static org.bukkit.Bukkit.getLogger;
 
 public class WorldEditor implements Runnable {
@@ -264,6 +265,16 @@ public class WorldEditor implements Runnable {
         @Override
         public Location getLocation() {
             return loc;
+        }
+
+        @Override
+        public String getMessage(Style style) {
+            return getMessage();
+        }
+
+        @Override
+        public FancyMessage getJsonMessage() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }
 }

@@ -36,6 +36,8 @@ import static de.diddiz.util.BukkitUtils.giveTool;
 import static de.diddiz.util.BukkitUtils.saveSpawnHeight;
 import static de.diddiz.util.Utils.isInt;
 import static de.diddiz.util.Utils.listing;
+import mkremins.fanciful.FancyMessage;
+import static org.bukkit.Bukkit.getConsoleSender;
 import static org.bukkit.Bukkit.getLogger;
 import static org.bukkit.Bukkit.getServer;
 
@@ -372,7 +374,14 @@ public class CommandsHandler implements CommandExecutor {
                     sender.sendMessage(ChatColor.DARK_AQUA + "Page " + page + "/" + numberOfPages);
                 }
                 for (int i = startpos; i <= stoppos; i++) {
-                    sender.sendMessage(ChatColor.GOLD + (session.lookupCache[i].getLocation() != null ? "(" + (i + 1) + ") " : "") + session.lookupCache[i].getMessage());
+                    if (session.lookupCache[i] instanceof BlockChange) {
+                        //new FancyMessage().send(sender,session.lookupCache[i].getMessage(LookupCacheElement.Style.JSON));
+                        getLogger().info(session.lookupCache[i].getMessage(LookupCacheElement.Style.JSON));
+                        getServer().dispatchCommand(getConsoleSender(),"minecraft:tellraw " + sender.getName() + " " + session.lookupCache[i].getMessage(LookupCacheElement.Style.JSON));
+                        //getServer().dispatchCommand(getConsoleSender(),"minecraft:tellraw " + sender.getName() + " {\"text\":\"\",\"extra\":[{\"text\":\"03-24 16:25:38 \",\"color\":\"white\"},{\"text\":\"frymaster \",\"color\":\"white\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"UUID: \",\"color\":\"white\"},{\"text\":\"c0fe9b4d-7389-4672-b65d-24c577196409\",\"color\":\"green\"}]}}},{\"text\":\"took \",\"color\":\"white\"},{\"text\":\"1\",\"color\":\"white\"},{\"text\":\"x \",\"color\":\"white\"},{\"text\":\"potion\",\"color\":\"white\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:\\\"minecraft:potion\\\",Damage:8261s,Count:1b,}\"}},{\"text\":\"373:0:8261:1\",\"color\":\"white\"},{\"text\":\" from \",\"color\":\"white\"},{\"text\":\"trapped chest\",\"color\":\"white\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:\\\"minecraft:trapped_chest\\\",Damage:0s,Count:1b,}\"}},{\"text\":\"146:0:0:1\",\"color\":\"white\"}]}");
+                    } else {
+                        sender.sendMessage(ChatColor.GOLD + (session.lookupCache[i].getLocation() != null ? "(" + (i + 1) + ") " : "") + session.lookupCache[i].getMessage());
+                    }
                 }
                 session.page = page;
             } else {
@@ -478,7 +487,7 @@ public class CommandsHandler implements CommandExecutor {
                     final List<LookupCacheElement> blockchanges = new ArrayList<LookupCacheElement>();
                     final LookupCacheElementFactory factory = new LookupCacheElementFactory(params, sender instanceof Player ? 2 / 3f : 1);
                     while (rs.next()) {
-                        blockchanges.add(factory.getLookupCacheElement(rs));
+                        blockchanges.add(factory.getLookupCacheElement(rs.getRow(), rs));
                     }
                     getSession(sender).lookupCache = blockchanges.toArray(new LookupCacheElement[blockchanges.size()]);
                     if (blockchanges.size() > linesPerPage) {

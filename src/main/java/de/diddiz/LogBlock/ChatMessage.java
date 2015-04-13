@@ -6,8 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static de.diddiz.util.LoggingUtil.checkText;
+import mkremins.fanciful.FancyMessage;
 
-public class ChatMessage implements LookupCacheElement {
+public class ChatMessage extends AbstractLookupCacheElement implements LookupCacheElement {
     final long id, date;
     final String playerName, message;
     final Actor player;
@@ -36,5 +37,15 @@ public class ChatMessage implements LookupCacheElement {
     @Override
     public String getMessage() {
         return (player != null ? "<" + player.getName() + "> " : "") + (message != null ? message : "");
+    }
+
+    @Override
+    public String getDataMessage() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public FancyMessage getJsonMessage() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
